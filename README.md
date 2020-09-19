@@ -9,7 +9,7 @@
 
 ## Installation
 
-    composer require y-ui/laravel-running-time ^1.1
+    composer require ygmt/laravel-running-time dev-master
     
 ## Configuration
     

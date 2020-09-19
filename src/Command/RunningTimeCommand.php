@@ -57,7 +57,7 @@ class RunningTimeCommand extends Command
 
         $options = $this->options();
 
-        $this->line = $options['line'] ?? 10;
+        $this->line = $options['line'] ?? 0;
         try {
             $this->start = $this->option('start') ? (new \DateTime($options['start'])) : (new \DateTime())->modify('-6 days');
             $this->end = $this->option('end') ? (new \DateTime($options['end'])) : (new \DateTime());
@@ -89,7 +89,7 @@ class RunningTimeCommand extends Command
         $line = $this->getLogFiles();
 
         $times = $max = $min = 0;
-        $sortedPath = array_pad([], $this->line, 0);
+        $sortedPath = array_pad([], $this->line ?? count($line), 0);
 
         $count = 0;
         foreach ($line as $logs) {
@@ -125,7 +125,7 @@ class RunningTimeCommand extends Command
             $value = [$value, $key];
         }
 
-        $average = round($times / $count, 2);
+        $average = round($times / $count, 5);
 
         $this->table(['path', 'average', 'max', 'min', 'count'], [[$path, $average, $max, $min, $count]]);
 
