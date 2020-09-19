@@ -34,6 +34,7 @@ class RunningTimeMiddleware
             $path = $request->route()->uri();
         }
 
+        $route = $path;
         $path = $request->method() . ':' . $path;
 
         $this->isDelayMode = config('runningtime.mode') == 'delay';
@@ -41,11 +42,21 @@ class RunningTimeMiddleware
         $this->redisTime = config('app.name') . ':laravel_running_time:time';
         $this->isDelayMode && $this->redis = app('redis');
 
+	    
         if (!app()->runningInConsole()) {
             $log = [
                 'time' => round(microtime(true) - LARAVEL_START, 2),
                 'path' => $path,
-                'params' => json_encode(['route_params' => $request->route() ? $request->route()->parameters() : null, 'params' => $request->all()], JSON_UNESCAPED_UNICODE),
+                'params' => json_encode([
+                		'route_params' => $request->route() ? $request->route()->parameters() : null,
+		                'params' => $request->all(),
+
+                ], JSON_UNESCAPED_UNICODE),
+	            'route' => $route,
+	            'method' => $request->method(),
+	            'header' => $request->header(),
+	            'client_ip' => $request->ip(),
+	            'created_at' => date('Y-m-d H:i:s'),
             ];
 
             $logText = implode('||', $log) . "\n";
