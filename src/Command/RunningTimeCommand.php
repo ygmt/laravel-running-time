@@ -57,7 +57,7 @@ class RunningTimeCommand extends Command
 
         $options = $this->options();
 
-        $this->line = $options['line'] ?? 0;
+        $this->line = $options['line'] ?? 99999999;
         try {
             $this->start = $this->option('start') ? (new \DateTime($options['start'])) : (new \DateTime())->modify('-6 days');
             $this->end = $this->option('end') ? (new \DateTime($options['end'])) : (new \DateTime());
@@ -87,9 +87,9 @@ class RunningTimeCommand extends Command
     public function pathTime($path)
     {
         $line = $this->getLogFiles();
-
+	    
         $times = $max = $min = 0;
-        $sortedPath = array_pad([], $this->line ?? count($line), 0);
+        $sortedPath = array_pad([], $this->line, 0);
 
         $count = 0;
         foreach ($line as $logs) {
@@ -140,7 +140,7 @@ class RunningTimeCommand extends Command
     public function longestTime()
     {
         $line = $this->getLogFiles();
-
+	   
         $pathTimes = $times = [];
 
         foreach ($line as $logs) {
